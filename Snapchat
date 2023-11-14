@@ -1,0 +1,28 @@
+import os, json, time
+from resources import *
+from functions import configureFirefoxWebdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import *
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+
+driver = configureFirefoxWebdriver()
+path = os.path.dirname(os.path.abspath(__file__))
+
+with open(path + '/resources/information.json', 'r') as json_file:
+    data = json.load(json_file)
+
+driver.get("https://map.snapchat.com/")
+
+keywords = data.get("research keywords")
+
+for word in keywords:
+    # reload home page
+    driver.get("https://map.snapchat.com/")
+
+    # automatic search based on keyword
+    driver.find_element(By.NAME, "q").send_keys(word)
+    driver.find_element(By.XPATH, "//button[@aria-label='Search']").click()
+    time.sleep(7)
+
